@@ -7,7 +7,7 @@ spec lives in docs/spec (link it here once exported).
 ## Repository layout
 - web/                 Next.js (App Router, TypeScript), npm
 - api/                 FastAPI (Python 3.12, uv), shared domain code
-- worker/              background workers (extraction, export)
+- api/app/workers/     background workers (separate process, same Python package)
 - validation-service/  ASP.NET Core (.NET 10)
 - evals/               labeled sample documents + eval script
 - infra/               Terraform; compose.yaml stays at the repo root
