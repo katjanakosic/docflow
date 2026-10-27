@@ -1,5 +1,7 @@
 from typing import Protocol
 
+from app.domain.models import ExtractedData
+
 
 class ObjectNotFoundError(Exception):
     """Raised when no file is stored under the requested key."""
@@ -17,3 +19,13 @@ class Storage(Protocol):
     def get(self, key: str) -> bytes: ...
 
     def exists(self, key: str) -> bool: ...
+
+
+class ExtractionError(Exception):
+    """Raised when a document cannot be turned into ExtractedData."""
+
+
+class Extractor(Protocol):
+    """Reads a PDF and returns the data found in it."""
+
+    def extract(self, pdf_bytes: bytes) -> ExtractedData: ...
