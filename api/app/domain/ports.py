@@ -1,6 +1,7 @@
 from typing import Protocol
+from uuid import UUID
 
-from app.domain.models import ExtractedData
+from app.domain.models import Document, ExtractedData
 
 
 class ObjectNotFoundError(Exception):
@@ -29,3 +30,27 @@ class Extractor(Protocol):
     """Reads a PDF and returns the data found in it."""
 
     def extract(self, pdf_bytes: bytes) -> ExtractedData: ...
+
+
+class DocumentNotFoundError(Exception):
+    """Raised when no document record exists with the requested id."""
+
+    def __init__(self, document_id: UUID) -> None:
+        super().__init__(f"No document with id {document_id}")
+        self.document_id = document_id
+
+
+class DocumentRepository(Protocol):
+    """Saves and loads document records."""
+
+    def add(self, document: Document) -> None: ...
+
+    def get(self, document_id: UUID) -> Document: ...
+
+    def update(self, document: Document) -> None: ...
+
+    def find_by_sha256(
+        self, sha256: str
+    ) -> list[
+        Document
+    ]: ...  # same file can exist several times, e.g. after a rejected upload is uploaded again
