@@ -1,0 +1,1018 @@
+{
+  "model": "claude-haiku-5-5",
+  "prompt_version": "v1",
+  "overall": 0.9227272727272727,
+  "documents": [
+    {
+      "file": "00_de_purchase_order.pdf",
+      "wrong": [
+        "supplier_vat_id"
+      ],
+      "extracted": {
+        "doc_type": "purchase_order",
+        "supplier_name": "Weber AG",
+        "supplier_vat_id": "CHE-854.204.792",
+        "document_number": "BE-81482",
+        "issue_date": "2026-02-27",
+        "due_date": null,
+        "po_reference": null,
+        "currency": "CHF",
+        "line_items": [
+          {
+            "description": "Monitor 27 Zoll",
+            "quantity": "8",
+            "unit_price": "260.24",
+            "line_total": "2081.92"
+          }
+        ],
+        "subtotal": "2081.92",
+        "vat_amount": "54.13",
+        "total": "2136.05",
+        "confidence": {
+          "doc_type": 0.95,
+          "supplier_name": 0.97,
+          "supplier_vat_id": 0.9,
+          "document_number": 0.98,
+          "issue_date": 0.98,
+          "currency": 0.99,
+          "line_items": 0.95,
+          "subtotal": 0.98,
+          "vat_amount": 0.95,
+          "total": 0.98
+        }
+      }
+    },
+    {
+      "file": "01_fr_invoice.pdf",
+      "wrong": [
+        "supplier_vat_id"
+      ],
+      "extracted": {
+        "doc_type": "invoice",
+        "supplier_name": "Bugnon SA",
+        "supplier_vat_id": "CHE-626.542.690",
+        "document_number": "FA-58807",
+        "issue_date": "2026-01-20",
+        "due_date": "2026-02-19",
+        "po_reference": null,
+        "currency": "EUR",
+        "line_items": [
+          {
+            "description": "Papier d'imprimante A4",
+            "quantity": "4",
+            "unit_price": "11.87",
+            "line_total": "47.48"
+          },
+          {
+            "description": "Stylos (paquet de 10)",
+            "quantity": "20",
+            "unit_price": "8.64",
+            "line_total": "172.80"
+          },
+          {
+            "description": "Tableau blanc",
+            "quantity": "20",
+            "unit_price": "141.63",
+            "line_total": "2832.60"
+          }
+        ],
+        "subtotal": "3052.88",
+        "vat_amount": "79.37",
+        "total": "3132.25",
+        "confidence": {
+          "doc_type": 0.98,
+          "supplier_name": 0.95,
+          "supplier_vat_id": 0.85,
+          "document_number": 0.98,
+          "issue_date": 0.97,
+          "due_date": 0.95,
+          "currency": 0.95,
+          "line_items": 0.92,
+          "subtotal": 0.95,
+          "vat_amount": 0.93,
+          "total": 0.97
+        }
+      }
+    },
+    {
+      "file": "02_it_invoice.pdf",
+      "wrong": [
+        "supplier_vat_id"
+      ],
+      "extracted": {
+        "doc_type": "invoice",
+        "supplier_name": "Pizzetti Sagl",
+        "supplier_vat_id": "CHE-884.807.786",
+        "document_number": "FT-52745",
+        "issue_date": "2026-07-29",
+        "due_date": "2026-08-28",
+        "po_reference": null,
+        "currency": "CHF",
+        "line_items": [
+          {
+            "description": "Scrivania",
+            "quantity": "8",
+            "unit_price": "269.06",
+            "line_total": "2152.48"
+          },
+          {
+            "description": "Lavagna bianca",
+            "quantity": "19",
+            "unit_price": "79.11",
+            "line_total": "1503.09"
+          },
+          {
+            "description": "Penne (confezione da 10)",
+            "quantity": "4",
+            "unit_price": "4.09",
+            "line_total": "16.36"
+          },
+          {
+            "description": "Lampada da tavolo",
+            "quantity": "17",
+            "unit_price": "37.83",
+            "line_total": "643.11"
+          },
+          {
+            "description": "Carta per stampante A4",
+            "quantity": "10",
+            "unit_price": "12.05",
+            "line_total": "120.50"
+          }
+        ],
+        "subtotal": "4435.54",
+        "vat_amount": "359.28",
+        "total": "4794.82",
+        "confidence": {
+          "doc_type": 0.98,
+          "supplier_name": 0.95,
+          "supplier_vat_id": 0.9,
+          "document_number": 0.98,
+          "issue_date": 0.97,
+          "due_date": 0.96,
+          "currency": 0.98,
+          "line_items": 0.93,
+          "subtotal": 0.97,
+          "vat_amount": 0.96,
+          "total": 0.98
+        }
+      }
+    },
+    {
+      "file": "03_en_purchase_order.pdf",
+      "wrong": [],
+      "extracted": {
+        "doc_type": "purchase_order",
+        "supplier_name": "Meyer Ltd",
+        "supplier_vat_id": "CHE-975.861.764 MWST",
+        "document_number": "PO-14686",
+        "issue_date": "2026-05-20",
+        "due_date": null,
+        "po_reference": null,
+        "currency": "CHF",
+        "line_items": [
+          {
+            "description": "Whiteboard",
+            "quantity": "1",
+            "unit_price": "115.49",
+            "line_total": "115.49"
+          },
+          {
+            "description": "Printer paper A4",
+            "quantity": "16",
+            "unit_price": "5.74",
+            "line_total": "91.84"
+          },
+          {
+            "description": "Office chair",
+            "quantity": "4",
+            "unit_price": "123.61",
+            "line_total": "494.44"
+          },
+          {
+            "description": "Desk lamp",
+            "quantity": "4",
+            "unit_price": "48.25",
+            "line_total": "193.00"
+          }
+        ],
+        "subtotal": "894.77",
+        "vat_amount": "72.48",
+        "total": "967.25",
+        "confidence": {
+          "doc_type": 0.98,
+          "supplier_name": 0.97,
+          "supplier_vat_id": 0.9,
+          "document_number": 0.99,
+          "issue_date": 0.98,
+          "currency": 0.99,
+          "line_items": 0.95,
+          "subtotal": 0.97,
+          "vat_amount": 0.96,
+          "total": 0.98
+        }
+      }
+    },
+    {
+      "file": "04_de_invoice.pdf",
+      "wrong": [
+        "supplier_vat_id"
+      ],
+      "extracted": {
+        "doc_type": "invoice",
+        "supplier_name": "Bauer GmbH",
+        "supplier_vat_id": "CHE-747.944.155",
+        "document_number": "RE-14046",
+        "issue_date": "2026-02-09",
+        "due_date": "2026-03-11",
+        "po_reference": null,
+        "currency": "CHF",
+        "line_items": [
+          {
+            "description": "Bürostuhl",
+            "quantity": "17",
+            "unit_price": "327.92",
+            "line_total": "5574.64"
+          },
+          {
+            "description": "Monitor 27 Zoll",
+            "quantity": "19",
+            "unit_price": "229.79",
+            "line_total": "4366.01"
+          },
+          {
+            "description": "Tischlampe",
+            "quantity": "2",
+            "unit_price": "69.07",
+            "line_total": "138.14"
+          },
+          {
+            "description": "Schreibtisch",
+            "quantity": "3",
+            "unit_price": "269.91",
+            "line_total": "809.73"
+          }
+        ],
+        "subtotal": "10888.52",
+        "vat_amount": "283.10",
+        "total": "11171.62",
+        "confidence": {
+          "doc_type": 0.98,
+          "supplier_name": 0.97,
+          "supplier_vat_id": 0.9,
+          "document_number": 0.99,
+          "issue_date": 0.98,
+          "due_date": 0.97,
+          "currency": 0.99,
+          "line_items": 0.95,
+          "subtotal": 0.97,
+          "vat_amount": 0.95,
+          "total": 0.98
+        }
+      }
+    },
+    {
+      "file": "05_fr_invoice.pdf",
+      "wrong": [
+        "supplier_vat_id"
+      ],
+      "extracted": {
+        "doc_type": "invoice",
+        "supplier_name": "Rey Sàrl",
+        "supplier_vat_id": "CHE-363.624.495",
+        "document_number": "FA-61434",
+        "issue_date": "2026-06-30",
+        "due_date": "2026-07-30",
+        "po_reference": null,
+        "currency": "CHF",
+        "line_items": [
+          {
+            "description": "Lampe de bureau",
+            "quantity": "15",
+            "unit_price": "70.35",
+            "line_total": "1055.25"
+          }
+        ],
+        "subtotal": "1055.25",
+        "vat_amount": "27.44",
+        "total": "1082.69",
+        "confidence": {
+          "doc_type": 0.98,
+          "supplier_name": 0.95,
+          "supplier_vat_id": 0.9,
+          "document_number": 0.98,
+          "issue_date": 0.97,
+          "due_date": 0.95,
+          "currency": 0.98,
+          "line_items": 0.95,
+          "subtotal": 0.98,
+          "vat_amount": 0.95,
+          "total": 0.98
+        }
+      }
+    },
+    {
+      "file": "06_it_purchase_order.pdf",
+      "wrong": [
+        "supplier_vat_id"
+      ],
+      "extracted": {
+        "doc_type": "purchase_order",
+        "supplier_name": "Vespa SA",
+        "supplier_vat_id": "CHE-604.764.325",
+        "document_number": "OA-38580",
+        "issue_date": "2026-06-11",
+        "due_date": null,
+        "po_reference": null,
+        "currency": "CHF",
+        "line_items": [
+          {
+            "description": "Monitor 27 pollici",
+            "quantity": "7",
+            "unit_price": "345.58",
+            "line_total": "2419.06"
+          },
+          {
+            "description": "Lampada da tavolo",
+            "quantity": "6",
+            "unit_price": "60.70",
+            "line_total": "364.20"
+          }
+        ],
+        "subtotal": "2783.26",
+        "vat_amount": "72.36",
+        "total": "2855.62",
+        "confidence": {
+          "doc_type": 0.95,
+          "supplier_name": 0.95,
+          "supplier_vat_id": 0.85,
+          "document_number": 0.98,
+          "issue_date": 0.8,
+          "currency": 0.98,
+          "line_items": 0.93,
+          "subtotal": 0.97,
+          "vat_amount": 0.95,
+          "total": 0.98
+        }
+      }
+    },
+    {
+      "file": "07_en_invoice.pdf",
+      "wrong": [
+        "supplier_vat_id"
+      ],
+      "extracted": {
+        "doc_type": "invoice",
+        "supplier_name": "Lanz AG",
+        "supplier_vat_id": "CHE-565.851.146",
+        "document_number": "INV-92633",
+        "issue_date": "2026-02-04",
+        "due_date": "2026-03-06",
+        "po_reference": null,
+        "currency": "CHF",
+        "line_items": [
+          {
+            "description": "Desk lamp",
+            "quantity": "17",
+            "unit_price": "70.41",
+            "line_total": "1196.97"
+          },
+          {
+            "description": "Office chair",
+            "quantity": "2",
+            "unit_price": "136.27",
+            "line_total": "272.54"
+          },
+          {
+            "description": "Printer paper A4",
+            "quantity": "9",
+            "unit_price": "12.76",
+            "line_total": "114.84"
+          }
+        ],
+        "subtotal": "1584.35",
+        "vat_amount": "41.19",
+        "total": "1625.54",
+        "confidence": {
+          "doc_type": 1.0,
+          "supplier_name": 0.98,
+          "supplier_vat_id": 0.95,
+          "document_number": 0.99,
+          "issue_date": 0.99,
+          "due_date": 0.98,
+          "currency": 0.99,
+          "line_items": 0.95,
+          "subtotal": 0.98,
+          "vat_amount": 0.97,
+          "total": 0.99
+        }
+      }
+    },
+    {
+      "file": "08_de_invoice.pdf",
+      "wrong": [
+        "supplier_vat_id"
+      ],
+      "extracted": {
+        "doc_type": "invoice",
+        "supplier_name": "Käser AG",
+        "supplier_vat_id": "CHE-256.455.945",
+        "document_number": "RE-22911",
+        "issue_date": "2026-09-12",
+        "due_date": "2026-10-12",
+        "po_reference": null,
+        "currency": "CHF",
+        "line_items": [
+          {
+            "description": "Aktenordner",
+            "quantity": "11",
+            "unit_price": "7.84",
+            "line_total": "86.24"
+          },
+          {
+            "description": "Whiteboard",
+            "quantity": "18",
+            "unit_price": "73.95",
+            "line_total": "1331.10"
+          },
+          {
+            "description": "Schreibtisch",
+            "quantity": "8",
+            "unit_price": "457.99",
+            "line_total": "3663.92"
+          }
+        ],
+        "subtotal": "5081.26",
+        "vat_amount": "132.11",
+        "total": "5213.37",
+        "confidence": {
+          "doc_type": 0.98,
+          "supplier_name": 0.97,
+          "supplier_vat_id": 0.9,
+          "document_number": 0.99,
+          "issue_date": 0.98,
+          "due_date": 0.97,
+          "currency": 0.99,
+          "line_items": 0.93,
+          "subtotal": 0.97,
+          "vat_amount": 0.95,
+          "total": 0.98
+        }
+      }
+    },
+    {
+      "file": "09_fr_purchase_order.pdf",
+      "wrong": [
+        "supplier_vat_id"
+      ],
+      "extracted": {
+        "doc_type": "purchase_order",
+        "supplier_name": "Rey Sàrl",
+        "supplier_vat_id": "CHE-384.513.813",
+        "document_number": "BC-10996",
+        "issue_date": "2026-05-05",
+        "due_date": null,
+        "po_reference": null,
+        "currency": "CHF",
+        "line_items": [
+          {
+            "description": "Papier d'imprimante A4",
+            "quantity": "13",
+            "unit_price": "14.48",
+            "line_total": "188.24"
+          },
+          {
+            "description": "Bureau",
+            "quantity": "15",
+            "unit_price": "609.32",
+            "line_total": "9139.80"
+          },
+          {
+            "description": "Lampe de bureau",
+            "quantity": "17",
+            "unit_price": "69.90",
+            "line_total": "1188.30"
+          },
+          {
+            "description": "Écran 27 pouces",
+            "quantity": "11",
+            "unit_price": "386.08",
+            "line_total": "4246.88"
+          },
+          {
+            "description": "Tableau blanc",
+            "quantity": "12",
+            "unit_price": "156.02",
+            "line_total": "1872.24"
+          }
+        ],
+        "subtotal": "16635.46",
+        "vat_amount": "1347.47",
+        "total": "17982.93",
+        "confidence": {
+          "doc_type": 0.95,
+          "supplier_name": 0.97,
+          "supplier_vat_id": 0.9,
+          "document_number": 0.98,
+          "issue_date": 0.97,
+          "currency": 0.98,
+          "line_items": 0.9,
+          "subtotal": 0.95,
+          "vat_amount": 0.95,
+          "total": 0.97
+        }
+      }
+    },
+    {
+      "file": "10_it_invoice.pdf",
+      "wrong": [
+        "supplier_vat_id"
+      ],
+      "extracted": {
+        "doc_type": "invoice",
+        "supplier_name": "Inzaghi SA",
+        "supplier_vat_id": "CHE-262.917.522",
+        "document_number": "FT-34005",
+        "issue_date": "2026-05-18",
+        "due_date": "2026-06-17",
+        "po_reference": null,
+        "currency": "CHF",
+        "line_items": [
+          {
+            "description": "Lavagna bianca",
+            "quantity": "14",
+            "unit_price": "120.78",
+            "line_total": "1690.92"
+          }
+        ],
+        "subtotal": "1690.92",
+        "vat_amount": "43.96",
+        "total": "1734.88",
+        "confidence": {
+          "doc_type": 0.98,
+          "supplier_name": 0.97,
+          "supplier_vat_id": 0.9,
+          "document_number": 0.98,
+          "issue_date": 0.97,
+          "due_date": 0.96,
+          "currency": 0.99,
+          "line_items": 0.95,
+          "subtotal": 0.98,
+          "vat_amount": 0.95,
+          "total": 0.98
+        }
+      }
+    },
+    {
+      "file": "11_en_invoice.pdf",
+      "wrong": [],
+      "extracted": {
+        "doc_type": "invoice",
+        "supplier_name": "Näf Ltd",
+        "supplier_vat_id": "CHE-860.157.273 MWST",
+        "document_number": "INV-16144",
+        "issue_date": "2026-04-21",
+        "due_date": "2026-05-21",
+        "po_reference": null,
+        "currency": "CHF",
+        "line_items": [
+          {
+            "description": "Whiteboard",
+            "quantity": "15",
+            "unit_price": "180.23",
+            "line_total": "2703.45"
+          },
+          {
+            "description": "Ring binder",
+            "quantity": "2",
+            "unit_price": "3.31",
+            "line_total": "6.62"
+          },
+          {
+            "description": "27-inch monitor",
+            "quantity": "12",
+            "unit_price": "235.47",
+            "line_total": "2825.64"
+          },
+          {
+            "description": "Printer paper A4",
+            "quantity": "5",
+            "unit_price": "12.64",
+            "line_total": "63.20"
+          }
+        ],
+        "subtotal": "5598.91",
+        "vat_amount": "453.51",
+        "total": "6052.42",
+        "confidence": {
+          "doc_type": 0.98,
+          "supplier_name": 0.97,
+          "supplier_vat_id": 0.9,
+          "document_number": 0.99,
+          "issue_date": 0.98,
+          "due_date": 0.97,
+          "currency": 0.99,
+          "line_items": 0.95,
+          "subtotal": 0.97,
+          "vat_amount": 0.97,
+          "total": 0.98
+        }
+      }
+    },
+    {
+      "file": "12_de_purchase_order.pdf",
+      "wrong": [
+        "supplier_vat_id"
+      ],
+      "extracted": {
+        "doc_type": "purchase_order",
+        "supplier_name": "Schärer GmbH",
+        "supplier_vat_id": "CHE-918.662.563",
+        "document_number": "BE-88340",
+        "issue_date": "2026-03-12",
+        "due_date": null,
+        "po_reference": null,
+        "currency": "CHF",
+        "line_items": [
+          {
+            "description": "Monitor 27 Zoll",
+            "quantity": "15",
+            "unit_price": "251.76",
+            "line_total": "3776.40"
+          },
+          {
+            "description": "Kugelschreiber (10er-Pack)",
+            "quantity": "19",
+            "unit_price": "7.37",
+            "line_total": "140.03"
+          },
+          {
+            "description": "Tischlampe",
+            "quantity": "7",
+            "unit_price": "56.30",
+            "line_total": "394.10"
+          },
+          {
+            "description": "Aktenordner",
+            "quantity": "2",
+            "unit_price": "5.04",
+            "line_total": "10.08"
+          }
+        ],
+        "subtotal": "4320.61",
+        "vat_amount": "112.34",
+        "total": "4432.95",
+        "confidence": {
+          "doc_type": 0.9,
+          "supplier_name": 0.97,
+          "supplier_vat_id": 0.9,
+          "document_number": 0.98,
+          "issue_date": 0.97,
+          "currency": 0.99,
+          "line_items": 0.93,
+          "subtotal": 0.95,
+          "vat_amount": 0.93,
+          "total": 0.97
+        }
+      }
+    },
+    {
+      "file": "13_fr_invoice.pdf",
+      "wrong": [
+        "supplier_vat_id"
+      ],
+      "extracted": {
+        "doc_type": "invoice",
+        "supplier_name": "Béguelin SA",
+        "supplier_vat_id": "CHE-460.839.987",
+        "document_number": "FA-96851",
+        "issue_date": "2026-02-16",
+        "due_date": "2026-03-18",
+        "po_reference": null,
+        "currency": "EUR",
+        "line_items": [
+          {
+            "description": "Papier d'imprimante A4",
+            "quantity": "3",
+            "unit_price": "8.09",
+            "line_total": "24.27"
+          },
+          {
+            "description": "Classeur",
+            "quantity": "10",
+            "unit_price": "4.88",
+            "line_total": "48.80"
+          }
+        ],
+        "subtotal": "73.07",
+        "vat_amount": "1.90",
+        "total": "74.97",
+        "confidence": {
+          "doc_type": 0.98,
+          "supplier_name": 0.97,
+          "supplier_vat_id": 0.9,
+          "document_number": 0.99,
+          "issue_date": 0.97,
+          "due_date": 0.95,
+          "currency": 0.9,
+          "line_items": 0.95,
+          "subtotal": 0.97,
+          "vat_amount": 0.93,
+          "total": 0.98
+        }
+      }
+    },
+    {
+      "file": "14_it_invoice.pdf",
+      "wrong": [
+        "supplier_vat_id"
+      ],
+      "extracted": {
+        "doc_type": "invoice",
+        "supplier_name": "Zacco SA",
+        "supplier_vat_id": "CHE-877.686.315",
+        "document_number": "FT-17134",
+        "issue_date": "2026-01-06",
+        "due_date": "2026-02-05",
+        "po_reference": null,
+        "currency": "CHF",
+        "line_items": [
+          {
+            "description": "Monitor 27 pollici",
+            "quantity": "8",
+            "unit_price": "411.77",
+            "line_total": "3294.16"
+          },
+          {
+            "description": "Lampada da tavolo",
+            "quantity": "12",
+            "unit_price": "32.74",
+            "line_total": "392.88"
+          },
+          {
+            "description": "Lavagna bianca",
+            "quantity": "3",
+            "unit_price": "161.28",
+            "line_total": "483.84"
+          },
+          {
+            "description": "Penne (confezione da 10)",
+            "quantity": "9",
+            "unit_price": "7.45",
+            "line_total": "67.05"
+          }
+        ],
+        "subtotal": "4237.93",
+        "vat_amount": "110.19",
+        "total": "4348.12",
+        "confidence": {
+          "doc_type": 0.97,
+          "supplier_name": 0.98,
+          "supplier_vat_id": 0.9,
+          "document_number": 0.99,
+          "issue_date": 0.9,
+          "due_date": 0.9,
+          "currency": 0.99,
+          "line_items": 0.95,
+          "subtotal": 0.98,
+          "vat_amount": 0.97,
+          "total": 0.99
+        }
+      }
+    },
+    {
+      "file": "15_en_purchase_order.pdf",
+      "wrong": [
+        "supplier_vat_id"
+      ],
+      "extracted": {
+        "doc_type": "purchase_order",
+        "supplier_name": "Schneider AG",
+        "supplier_vat_id": "CHE-986.853.269",
+        "document_number": "PO-77725",
+        "issue_date": "2026-01-22",
+        "due_date": null,
+        "po_reference": null,
+        "currency": "CHF",
+        "line_items": [
+          {
+            "description": "Office chair",
+            "quantity": "16",
+            "unit_price": "225.25",
+            "line_total": "3604.00"
+          },
+          {
+            "description": "Desk",
+            "quantity": "14",
+            "unit_price": "440.21",
+            "line_total": "6162.94"
+          },
+          {
+            "description": "27-inch monitor",
+            "quantity": "13",
+            "unit_price": "388.41",
+            "line_total": "5049.33"
+          }
+        ],
+        "subtotal": "14816.27",
+        "vat_amount": "385.22",
+        "total": "15201.49",
+        "confidence": {
+          "doc_type": 0.98,
+          "supplier_name": 0.97,
+          "supplier_vat_id": 0.9,
+          "document_number": 0.99,
+          "issue_date": 0.98,
+          "currency": 0.99,
+          "line_items": 0.95,
+          "subtotal": 0.97,
+          "vat_amount": 0.95,
+          "total": 0.98,
+          "due_date": 1.0,
+          "po_reference": 1.0
+        }
+      }
+    },
+    {
+      "file": "16_de_invoice.pdf",
+      "wrong": [
+        "supplier_vat_id"
+      ],
+      "extracted": {
+        "doc_type": "invoice",
+        "supplier_name": "Weber GmbH",
+        "supplier_vat_id": "CHE-924.997.366",
+        "document_number": "RE-68991",
+        "issue_date": "2026-04-11",
+        "due_date": "2026-05-11",
+        "po_reference": null,
+        "currency": "EUR",
+        "line_items": [
+          {
+            "description": "Kugelschreiber (10er-Pack)",
+            "quantity": "15",
+            "unit_price": "5.97",
+            "line_total": "89.55"
+          },
+          {
+            "description": "Bürostuhl",
+            "quantity": "12",
+            "unit_price": "252.84",
+            "line_total": "3034.08"
+          }
+        ],
+        "subtotal": "3123.63",
+        "vat_amount": "81.21",
+        "total": "3204.84",
+        "confidence": {
+          "doc_type": 0.98,
+          "supplier_name": 0.97,
+          "supplier_vat_id": 0.93,
+          "document_number": 0.98,
+          "issue_date": 0.97,
+          "due_date": 0.95,
+          "currency": 0.95,
+          "line_items": 0.93,
+          "subtotal": 0.96,
+          "vat_amount": 0.95,
+          "total": 0.97
+        }
+      }
+    },
+    {
+      "file": "17_fr_invoice.pdf",
+      "wrong": [
+        "supplier_vat_id"
+      ],
+      "extracted": {
+        "doc_type": "invoice",
+        "supplier_name": "Montandon Sàrl",
+        "supplier_vat_id": "CHE-831.123.796",
+        "document_number": "FA-91485",
+        "issue_date": "2026-04-25",
+        "due_date": "2026-05-25",
+        "po_reference": null,
+        "currency": "CHF",
+        "line_items": [
+          {
+            "description": "Tableau blanc",
+            "quantity": "5",
+            "unit_price": "63.72",
+            "line_total": "318.60"
+          }
+        ],
+        "subtotal": "318.60",
+        "vat_amount": "8.28",
+        "total": "326.88",
+        "confidence": {
+          "doc_type": 0.98,
+          "supplier_name": 0.97,
+          "supplier_vat_id": 0.95,
+          "document_number": 0.99,
+          "issue_date": 0.98,
+          "due_date": 0.97,
+          "currency": 0.99,
+          "line_items": 0.96,
+          "subtotal": 0.98,
+          "vat_amount": 0.97,
+          "total": 0.99
+        }
+      }
+    },
+    {
+      "file": "18_it_purchase_order.pdf",
+      "wrong": [
+        "supplier_vat_id"
+      ],
+      "extracted": {
+        "doc_type": "purchase_order",
+        "supplier_name": "Marzorati SA",
+        "supplier_vat_id": "CHE-257.499.147",
+        "document_number": "OA-41382",
+        "issue_date": "2026-06-07",
+        "due_date": null,
+        "po_reference": null,
+        "currency": "CHF",
+        "line_items": [
+          {
+            "description": "Carta per stampante A4",
+            "quantity": "16",
+            "unit_price": "13.27",
+            "line_total": "212.32"
+          },
+          {
+            "description": "Lavagna bianca",
+            "quantity": "11",
+            "unit_price": "136.54",
+            "line_total": "1501.94"
+          },
+          {
+            "description": "Scrivania",
+            "quantity": "2",
+            "unit_price": "889.16",
+            "line_total": "1778.32"
+          }
+        ],
+        "subtotal": "3492.58",
+        "vat_amount": "90.81",
+        "total": "3583.39",
+        "confidence": {
+          "doc_type": 0.9,
+          "supplier_name": 0.95,
+          "supplier_vat_id": 0.85,
+          "document_number": 0.98,
+          "issue_date": 0.95,
+          "currency": 0.99,
+          "line_items": 0.93,
+          "subtotal": 0.97,
+          "vat_amount": 0.95,
+          "total": 0.98
+        }
+      }
+    },
+    {
+      "file": "19_en_invoice.pdf",
+      "wrong": [],
+      "extracted": {
+        "doc_type": "invoice",
+        "supplier_name": "Schärer Ltd",
+        "supplier_vat_id": "CHE-466.467.166 MWST",
+        "document_number": "INV-63149",
+        "issue_date": "2026-09-11",
+        "due_date": "2026-10-11",
+        "po_reference": null,
+        "currency": "EUR",
+        "line_items": [
+          {
+            "description": "Pens (pack of 10)",
+            "quantity": "10",
+            "unit_price": "7.28",
+            "line_total": "72.80"
+          },
+          {
+            "description": "Desk lamp",
+            "quantity": "1",
+            "unit_price": "51.29",
+            "line_total": "51.29"
+          }
+        ],
+        "subtotal": "124.09",
+        "vat_amount": "3.23",
+        "total": "127.32",
+        "confidence": {
+          "doc_type": 1.0,
+          "supplier_name": 0.98,
+          "document_number": 0.99,
+          "issue_date": 0.99,
+          "due_date": 0.98,
+          "currency": 0.95,
+          "line_items": 0.95,
+          "subtotal": 0.97,
+          "vat_amount": 0.96,
+          "total": 0.98,
+          "supplier_vat_id": 0.9
+        }
+      }
+    }
+  ]
+}
