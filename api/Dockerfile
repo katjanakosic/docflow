@@ -15,6 +15,8 @@ RUN useradd --create-home --uid 1000 appuser
 
 COPY --from=build /app/.venv /app/.venv
 COPY app ./app
+COPY alembic.ini ./
+COPY migrations ./migrations
 
 USER appuser
 EXPOSE 8000

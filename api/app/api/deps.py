@@ -5,9 +5,10 @@ from typing import Annotated
 
 import anthropic
 from fastapi import Depends
+from sqlalchemy import Engine, create_engine
 
 from app.adapters.llm_extractor import LLMExtractor
-from app.adapters.memory_documents import InMemoryDocumentRepository
+from app.adapters.postgres_documents import PostgresDocumentRepository
 from app.adapters.s3_storage import S3Storage
 from app.config import get_settings
 from app.domain.ports import DocumentRepository, Extractor, Storage
@@ -27,8 +28,13 @@ def get_storage() -> Storage:
 
 
 @lru_cache
+def get_engine() -> Engine:
+    return create_engine(get_settings().database_url, pool_pre_ping=True)
+
+
+@lru_cache
 def get_documents() -> DocumentRepository:
-    return InMemoryDocumentRepository()  # replaced by Postgres later
+    return PostgresDocumentRepository(get_engine())
 
 
 @lru_cache
