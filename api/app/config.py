@@ -15,6 +15,8 @@ class Settings(BaseSettings):
     s3_secret_key: str
     s3_bucket: str
 
+    redis_url: str
+
     anthropic_api_key: str
     llm_model: str = "claude-haiku-5-5"
 

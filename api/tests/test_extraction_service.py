@@ -4,6 +4,7 @@ import pytest
 
 from app.adapters.fake_extractor import FakeExtractor
 from app.adapters.memory_documents import InMemoryDocumentRepository
+from app.adapters.memory_queue import InMemoryQueue
 from app.adapters.memory_storage import InMemoryStorage
 from app.domain.state_machine import InvalidTransitionError, Status
 from app.services.extraction import ExtractionService
@@ -18,7 +19,7 @@ def make_services():
     storage = InMemoryStorage()
     documents = InMemoryDocumentRepository()
     extractor = FakeExtractor(EVALS_DIR / "samples", EVALS_DIR / "labels.json")
-    upload = UploadService(storage, documents)
+    upload = UploadService(storage, documents, InMemoryQueue())
     extraction = ExtractionService(storage, documents, extractor)
     return upload, extraction, documents
 

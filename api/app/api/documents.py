@@ -7,11 +7,10 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, Response, UploadFile, status
 from pydantic import BaseModel
 
-from app.api.deps import get_documents, get_extraction_service, get_upload_service
+from app.api.deps import get_documents, get_upload_service
 from app.domain.models import Document, ExtractedData
 from app.domain.ports import DocumentNotFoundError, DocumentRepository
-from app.domain.state_machine import InvalidTransitionError, Status
-from app.services.extraction import ExtractionService
+from app.domain.state_machine import Status
 from app.services.upload import InvalidUploadError, UploadService
 
 router = APIRouter(prefix="/api/v1/documents", tags=["documents"])
@@ -88,22 +87,3 @@ def get_document(
         return DocumentOut.from_document(documents.get(document_id))
     except DocumentNotFoundError:
         raise HTTPException(status_code=404, detail="Document not found") from None
-
-
-@router.post(
-    "/{document_id}/extract",
-    responses={
-        404: {"description": "Document not found"},
-        409: {"description": "The document's status does not allow extraction"},
-    },
-)
-def extract_document(
-    document_id: UUID,
-    service: Annotated[ExtractionService, Depends(get_extraction_service)],
-) -> DocumentOut:
-    try:
-        return DocumentOut.from_document(service.extract_document(document_id))
-    except DocumentNotFoundError:
-        raise HTTPException(status_code=404, detail="Document not found") from None
-    except InvalidTransitionError as error:
-        raise HTTPException(status_code=409, detail=str(error)) from None

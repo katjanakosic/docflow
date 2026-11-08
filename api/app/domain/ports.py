@@ -54,3 +54,9 @@ class DocumentRepository(Protocol):
     ) -> list[
         Document
     ]: ...  # same file can exist several times, e.g. after a rejected upload is uploaded again
+
+
+class ExtractionQueue(Protocol):
+    """Hands documents to a background worker for extraction."""
+
+    def enqueue(self, document_id: UUID) -> None: ...

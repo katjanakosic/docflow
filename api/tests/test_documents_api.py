@@ -4,10 +4,10 @@ from uuid import uuid4
 import pytest
 from fastapi.testclient import TestClient
 
-from app.adapters.fake_extractor import FakeExtractor
 from app.adapters.memory_documents import InMemoryDocumentRepository
+from app.adapters.memory_queue import InMemoryQueue
 from app.adapters.memory_storage import InMemoryStorage
-from app.api.deps import get_documents, get_extractor, get_storage
+from app.api.deps import get_documents, get_queue, get_storage
 from app.main import app
 
 EVALS_DIR = Path(__file__).parents[2] / "evals"
@@ -15,14 +15,17 @@ SAMPLE_PDF = (EVALS_DIR / "samples" / "00_de_purchase_order.pdf").read_bytes()
 
 
 @pytest.fixture
-def client():
+def queue():
+    return InMemoryQueue()
+
+
+@pytest.fixture
+def client(queue):
     storage = InMemoryStorage()
     documents = InMemoryDocumentRepository()
     app.dependency_overrides[get_storage] = lambda: storage
     app.dependency_overrides[get_documents] = lambda: documents
-    app.dependency_overrides[get_extractor] = lambda: FakeExtractor(
-        EVALS_DIR / "samples", EVALS_DIR / "labels.json"
-    )
+    app.dependency_overrides[get_queue] = lambda: queue
     yield TestClient(app)
     app.dependency_overrides.clear()
 
@@ -73,35 +76,6 @@ def test_fetching_with_an_invalid_id_returns_422(client):
     assert response.status_code == 422
 
 
-def extract(client, document_id):
-    return client.post(f"/api/v1/documents/{document_id}/extract")
-
-
-def test_extracting_a_document_returns_its_data(client):
+def test_an_upload_queues_an_extraction_job(client, queue):
     document_id = upload(client).json()["document"]["id"]
-    response = extract(client, document_id)
-
-    assert response.status_code == 200
-    body = response.json()
-    assert body["status"] == "needs_review"
-    assert body["extracted_data"]["supplier_name"] == "Weber AG"
-    assert body["extracted_data"]["total"] == "2136.05"
-
-
-def test_a_failed_extraction_returns_the_failed_status_and_reason(client):
-    document_id = upload(client, content=b"%PDF-1.4 unknown").json()["document"]["id"]
-    body = extract(client, document_id).json()
-
-    assert body["status"] == "extraction_failed"
-    assert body["extracted_data"] is None
-    assert "Unknown document" in body["last_error"]
-
-
-def test_extracting_twice_returns_409(client):
-    document_id = upload(client).json()["document"]["id"]
-    extract(client, document_id)
-    assert extract(client, document_id).status_code == 409
-
-
-def test_extracting_an_unknown_document_returns_404(client):
-    assert extract(client, uuid4()).status_code == 404
+    assert [str(queued) for queued in queue.enqueued] == [document_id]

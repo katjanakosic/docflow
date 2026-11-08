@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from uuid import uuid4
 
 from app.domain.models import Document
-from app.domain.ports import DocumentRepository, Storage
+from app.domain.ports import DocumentRepository, ExtractionQueue, Storage
 from app.domain.state_machine import Status
 
 MAX_UPLOAD_BYTES = 20 * 1024 * 1024  # 20 MB, from the spec
@@ -21,9 +21,12 @@ class UploadResult:
 
 
 class UploadService:
-    def __init__(self, storage: Storage, documents: DocumentRepository) -> None:
+    def __init__(
+        self, storage: Storage, documents: DocumentRepository, queue: ExtractionQueue
+    ) -> None:
         self._storage = storage
         self._documents = documents
+        self._queue = queue
 
     def upload(self, file_name: str, data: bytes, uploaded_by: str) -> UploadResult:
         if not data.startswith(PDF_SIGNATURE):
@@ -56,4 +59,5 @@ class UploadService:
             uploaded_by=uploaded_by,
         )
         self._documents.add(document)
+        self._queue.enqueue(document.id)
         return UploadResult(document=document, duplicate=False)

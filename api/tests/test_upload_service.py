@@ -4,6 +4,7 @@ from pathlib import Path
 import pytest
 
 from app.adapters.memory_documents import InMemoryDocumentRepository
+from app.adapters.memory_queue import InMemoryQueue
 from app.adapters.memory_storage import InMemoryStorage
 from app.domain.state_machine import Action, Status
 from app.services.upload import MAX_UPLOAD_BYTES, InvalidUploadError, UploadService
@@ -16,11 +17,12 @@ SAMPLE_PDF = (
 def make_service():
     storage = InMemoryStorage()
     documents = InMemoryDocumentRepository()
-    return UploadService(storage, documents), storage, documents
+    queue = InMemoryQueue()
+    return UploadService(storage, documents, queue), storage, documents, queue
 
 
 def test_upload_stores_the_file_and_creates_a_record():
-    service, storage, documents = make_service()
+    service, storage, documents, _ = make_service()
     result = service.upload("order.pdf", SAMPLE_PDF, uploaded_by="kati")
 
     assert result.duplicate is False
@@ -31,7 +33,7 @@ def test_upload_stores_the_file_and_creates_a_record():
 
 
 def test_uploading_the_same_file_twice_returns_the_existing_document():
-    service, _, documents = make_service()
+    service, _, documents, _ = make_service()
     first = service.upload("order.pdf", SAMPLE_PDF, uploaded_by="kati")
     second = service.upload("copy.pdf", SAMPLE_PDF, uploaded_by="kati")
 
@@ -41,7 +43,7 @@ def test_uploading_the_same_file_twice_returns_the_existing_document():
 
 
 def test_a_rejected_file_can_be_uploaded_again():
-    service, _, documents = make_service()
+    service, _, documents, _ = make_service()
     first = service.upload("order.pdf", SAMPLE_PDF, uploaded_by="kati")
 
     rejected = documents.get(first.document.id)
@@ -55,14 +57,27 @@ def test_a_rejected_file_can_be_uploaded_again():
 
 
 def test_a_file_that_is_not_a_pdf_is_refused():
-    service, _, documents = make_service()
+    service, _, documents, _ = make_service()
     with pytest.raises(InvalidUploadError):
         service.upload("notes.txt", b"just some text", uploaded_by="kati")
     assert documents.find_by_sha256(hashlib.sha256(b"just some text").hexdigest()) == []
 
 
 def test_a_file_over_20_mb_is_refused():
-    service, _, _ = make_service()
+    service, _, _, _ = make_service()
     too_large = b"%PDF-" + bytes(MAX_UPLOAD_BYTES)
     with pytest.raises(InvalidUploadError):
         service.upload("huge.pdf", too_large, uploaded_by="kati")
+
+
+def test_a_new_upload_queues_an_extraction_job():
+    service, _, _, queue = make_service()
+    result = service.upload("order.pdf", SAMPLE_PDF, uploaded_by="kati")
+    assert queue.enqueued == [result.document.id]
+
+
+def test_a_duplicate_upload_queues_nothing_new():
+    service, _, _, queue = make_service()
+    service.upload("order.pdf", SAMPLE_PDF, uploaded_by="kati")
+    service.upload("copy.pdf", SAMPLE_PDF, uploaded_by="kati")
+    assert len(queue.enqueued) == 1

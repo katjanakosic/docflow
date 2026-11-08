@@ -61,6 +61,18 @@ services:
       timeout: 3s
       retries: 5
 
+  worker:
+    build: ./api
+    command: rq worker extraction --url redis://redis:6379/0 --worker-class rq.SimpleWorker
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+psycopg://docflow:docflow@postgres:5432/docflow
+      REDIS_URL: redis://redis:6379/0
+      S3_ENDPOINT_URL: http://minio:9000
+    depends_on:
+      api:
+        condition: service_healthy
+
 volumes:
   pgdata:
   miniodata:
