@@ -9,6 +9,7 @@ from sqlalchemy import Engine, create_engine
 
 from app.adapters.llm_extractor import LLMExtractor
 from app.adapters.postgres_documents import PostgresDocumentRepository
+from app.adapters.retrying_extractor import RetryingExtractor
 from app.adapters.rq_queue import RQExtractionQueue
 from app.adapters.s3_storage import S3Storage
 from app.config import get_settings
@@ -41,7 +42,7 @@ def get_documents() -> DocumentRepository:
 def get_extractor() -> Extractor:
     settings = get_settings()
     client = anthropic.Anthropic(api_key=settings.anthropic_api_key)
-    return LLMExtractor(client, model=settings.llm_model)
+    return RetryingExtractor(LLMExtractor(client, model=settings.llm_model))
 
 
 @lru_cache
