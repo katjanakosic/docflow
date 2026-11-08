@@ -4,7 +4,15 @@ from datetime import datetime
 from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, Response, UploadFile, status
+from fastapi import (
+    APIRouter,
+    Depends,
+    HTTPException,
+    Query,
+    Response,
+    UploadFile,
+    status,
+)
 from pydantic import BaseModel
 
 from app.api.deps import get_documents, get_upload_service
@@ -87,3 +95,13 @@ def get_document(
         return DocumentOut.from_document(documents.get(document_id))
     except DocumentNotFoundError:
         raise HTTPException(status_code=404, detail="Document not found") from None
+
+
+@router.get("")
+def list_documents(
+    documents: Annotated[DocumentRepository, Depends(get_documents)],
+    limit: Annotated[int, Query(ge=1, le=100)] = 50,
+) -> list[DocumentOut]:
+    return [
+        DocumentOut.from_document(document) for document in documents.list_recent(limit)
+    ]

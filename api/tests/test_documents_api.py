@@ -79,3 +79,23 @@ def test_fetching_with_an_invalid_id_returns_422(client):
 def test_an_upload_queues_an_extraction_job(client, queue):
     document_id = upload(client).json()["document"]["id"]
     assert [str(queued) for queued in queue.enqueued] == [document_id]
+
+
+def test_listing_documents_returns_the_newest_first(client):
+    first = upload(client).json()["document"]["id"]
+    second = upload(client, content=b"%PDF-1.4 second", name="second.pdf").json()[
+        "document"
+    ]["id"]
+
+    response = client.get("/api/v1/documents")
+
+    assert response.status_code == 200
+    assert [d["id"] for d in response.json()] == [second, first]
+
+
+def test_listing_respects_the_limit_and_rejects_invalid_values(client):
+    upload(client)
+    upload(client, content=b"%PDF-1.4 second", name="second.pdf")
+
+    assert len(client.get("/api/v1/documents?limit=1").json()) == 1
+    assert client.get("/api/v1/documents?limit=0").status_code == 422

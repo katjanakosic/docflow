@@ -55,6 +55,8 @@ class DocumentRepository(Protocol):
         Document
     ]: ...  # same file can exist several times, e.g. after a rejected upload is uploaded again
 
+    def list_recent(self, limit: int) -> list[Document]: ...
+
 
 class ExtractionQueue(Protocol):
     """Hands documents to a background worker for extraction."""

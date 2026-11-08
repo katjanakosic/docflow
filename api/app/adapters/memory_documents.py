@@ -27,3 +27,9 @@ class InMemoryDocumentRepository:
 
     def find_by_sha256(self, sha256: str) -> list[Document]:
         return [replace(d) for d in self._documents.values() if d.sha256 == sha256]
+
+    def list_recent(self, limit: int) -> list[Document]:
+        newest_first = sorted(
+            self._documents.values(), key=lambda d: d.created_at, reverse=True
+        )
+        return [replace(d) for d in newest_first[:limit]]

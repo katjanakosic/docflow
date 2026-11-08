@@ -1,5 +1,7 @@
 import json
 import os
+from dataclasses import replace
+from datetime import UTC, datetime
 from pathlib import Path
 from uuid import uuid4
 
@@ -93,3 +95,15 @@ def test_extracted_data_survives_the_round_trip(repository):
     repository.add(document)
 
     assert repository.get(document.id).extracted_data == document.extracted_data
+
+
+def test_list_recent_returns_the_newest_first_up_to_the_limit(repository):
+    older = replace(make_document("a"), created_at=datetime(2026, 1, 1, tzinfo=UTC))
+    middle = replace(make_document("b"), created_at=datetime(2026, 2, 1, tzinfo=UTC))
+    newest = replace(make_document("c"), created_at=datetime(2026, 3, 1, tzinfo=UTC))
+    for document in (middle, older, newest):  # added out of order on purpose
+        repository.add(document)
+
+    recent = repository.list_recent(limit=2)
+
+    assert [d.id for d in recent] == [newest.id, middle.id]

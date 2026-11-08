@@ -114,3 +114,13 @@ class PostgresDocumentRepository:
         with self._engine.connect() as connection:
             rows = connection.execute(query).mappings().all()
         return [_to_document(row) for row in rows]
+
+    def list_recent(self, limit: int) -> list[Document]:
+        query = (
+            select(documents_table)
+            .order_by(documents_table.c.created_at.desc())
+            .limit(limit)
+        )
+        with self._engine.connect() as connection:
+            rows = connection.execute(query).mappings().all()
+        return [_to_document(row) for row in rows]
