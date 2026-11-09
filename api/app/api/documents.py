@@ -15,10 +15,16 @@ from fastapi import (
 )
 from pydantic import BaseModel, Field
 
-from app.api.deps import get_documents, get_review_service, get_upload_service
+from app.api.deps import (
+    get_documents,
+    get_retry_service,
+    get_review_service,
+    get_upload_service,
+)
 from app.domain.models import Document, ExtractedData
 from app.domain.ports import DocumentNotFoundError, DocumentRepository
 from app.domain.state_machine import InvalidTransitionError, Status
+from app.services.retry import RetryService
 from app.services.review import InvalidReviewError, ReviewService
 from app.services.upload import InvalidUploadError, UploadService
 
@@ -160,3 +166,23 @@ def reject_document(
         raise HTTPException(status_code=409, detail=str(error)) from None
     except InvalidReviewError as error:
         raise HTTPException(status_code=400, detail=str(error)) from None
+
+
+@router.post(
+    "/{document_id}/retry",
+    status_code=status.HTTP_202_ACCEPTED,
+    responses={
+        404: {"description": "Document not found"},
+        409: {"description": "Not failed"},
+    },
+)
+def retry_extraction(
+    document_id: UUID,
+    service: Annotated[RetryService, Depends(get_retry_service)],
+) -> DocumentOut:
+    try:
+        return DocumentOut.from_document(service.retry_extraction(document_id))
+    except DocumentNotFoundError:
+        raise HTTPException(status_code=404, detail="Document not found") from None
+    except InvalidTransitionError as error:
+        raise HTTPException(status_code=409, detail=str(error)) from None

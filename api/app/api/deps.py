@@ -14,6 +14,7 @@ from app.adapters.rq_queue import RQExtractionQueue
 from app.adapters.s3_storage import S3Storage
 from app.config import get_settings
 from app.domain.ports import DocumentRepository, ExtractionQueue, Extractor, Storage
+from app.services.retry import RetryService
 from app.services.review import ReviewService
 from app.services.upload import UploadService
 
@@ -63,3 +64,10 @@ def get_review_service(
     documents: Annotated[DocumentRepository, Depends(get_documents)],
 ) -> ReviewService:
     return ReviewService(documents)
+
+
+def get_retry_service(
+    documents: Annotated[DocumentRepository, Depends(get_documents)],
+    queue: Annotated[ExtractionQueue, Depends(get_queue)],
+) -> RetryService:
+    return RetryService(documents, queue)

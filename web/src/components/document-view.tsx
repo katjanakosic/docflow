@@ -6,6 +6,7 @@ import { ReviewActions } from "@/components/review-actions";
 import { StatusBadge } from "@/components/status-badge";
 import type { components } from "@/lib/api-types";
 import { formatDate, formatDateTime, formatMoney } from "@/lib/format";
+import { RetryButton } from "@/components/retry-button";
 
 type DocumentOut = components["schemas"]["DocumentOut"];
 type ExtractedData = NonNullable<DocumentOut["extracted_data"]>;
@@ -52,6 +53,7 @@ export function DocumentView({ initialDocument }: { initialDocument: DocumentOut
         <div className="rounded-md border border-red-700/30 bg-red-50 px-5 py-4 text-sm text-red-800">
           <p className="font-medium">The data couldn’t be read from this PDF.</p>
           <p className="mt-1">{document.last_error}</p>
+          <RetryButton documentId={document.id} />
         </div>
       )}
 

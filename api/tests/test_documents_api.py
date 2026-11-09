@@ -153,3 +153,28 @@ def test_rejecting_without_a_reason_returns_422(client, documents):
 
 def test_approving_an_unknown_document_returns_404(client):
     assert client.post(f"/api/v1/documents/{uuid4()}/approve").status_code == 404
+
+
+def failed_extraction(client, documents) -> str:
+    """Uploads the sample and marks its extraction as failed, as the worker would."""
+    document_id = upload(client).json()["document"]["id"]
+    document = documents.get(UUID(document_id))
+    document.apply(Action.START_EXTRACTION)
+    document.apply(Action.EXTRACTION_FAILED)
+    document.last_error = "The AI service could not be reached."
+    documents.update(document)
+    return document_id
+
+
+def test_retrying_a_failed_extraction_queues_it_again(client, documents, queue):
+    document_id = failed_extraction(client, documents)
+    response = client.post(f"/api/v1/documents/{document_id}/retry")
+
+    assert response.status_code == 202
+    assert response.json()["status"] == "uploaded"
+    assert [str(queued) for queued in queue.enqueued] == [document_id, document_id]
+
+
+def test_retrying_a_document_that_did_not_fail_returns_409(client, documents):
+    document_id = ready_for_review(client, documents)
+    assert client.post(f"/api/v1/documents/{document_id}/retry").status_code == 409
