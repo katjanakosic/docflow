@@ -107,3 +107,13 @@ def test_list_recent_returns_the_newest_first_up_to_the_limit(repository):
     recent = repository.list_recent(limit=2)
 
     assert [d.id for d in recent] == [newest.id, middle.id]
+
+
+def test_review_fields_survive_the_round_trip(repository):
+    document = make_document()
+    document.reviewed_by = "reviewer"
+    document.reviewed_at = datetime(2026, 11, 9, 12, 0, tzinfo=UTC)
+    document.rejection_reason = "Unreadable or incomplete"
+    repository.add(document)
+
+    assert repository.get(document.id) == document

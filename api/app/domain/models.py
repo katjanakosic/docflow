@@ -58,6 +58,9 @@ class Document:
     created_at: datetime = field(default_factory=lambda: datetime.now(UTC))
     extracted_data: ExtractedData | None = None  # filled in by a successful extraction
     last_error: str | None = None  # readable reason if extraction failed
+    reviewed_by: str | None = None
+    reviewed_at: datetime | None = None
+    rejection_reason: str | None = None
 
     def apply(self, action: Action) -> None:
         """Change the status through the state machine; raises if not allowed."""

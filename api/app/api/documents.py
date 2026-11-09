@@ -13,12 +13,13 @@ from fastapi import (
     UploadFile,
     status,
 )
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
-from app.api.deps import get_documents, get_upload_service
+from app.api.deps import get_documents, get_review_service, get_upload_service
 from app.domain.models import Document, ExtractedData
 from app.domain.ports import DocumentNotFoundError, DocumentRepository
-from app.domain.state_machine import Status
+from app.domain.state_machine import InvalidTransitionError, Status
+from app.services.review import InvalidReviewError, ReviewService
 from app.services.upload import InvalidUploadError, UploadService
 
 router = APIRouter(prefix="/api/v1/documents", tags=["documents"])
@@ -36,6 +37,9 @@ class DocumentOut(BaseModel):
     created_at: datetime
     extracted_data: ExtractedData | None
     last_error: str | None
+    reviewed_by: str | None
+    reviewed_at: datetime | None
+    rejection_reason: str | None
 
     @classmethod
     def from_document(cls, document: Document) -> "DocumentOut":
@@ -47,6 +51,9 @@ class DocumentOut(BaseModel):
             created_at=document.created_at,
             extracted_data=document.extracted_data,
             last_error=document.last_error,
+            reviewed_by=document.reviewed_by,
+            reviewed_at=document.reviewed_at,
+            rejection_reason=document.rejection_reason,
         )
 
 
@@ -105,3 +112,51 @@ def list_documents(
     return [
         DocumentOut.from_document(document) for document in documents.list_recent(limit)
     ]
+
+
+class RejectIn(BaseModel):
+    reason: str = Field(min_length=1, max_length=500)
+
+
+@router.post(
+    "/{document_id}/approve",
+    responses={
+        404: {"description": "Document not found"},
+        409: {"description": "Not in review"},
+    },
+)
+def approve_document(
+    document_id: UUID,
+    service: Annotated[ReviewService, Depends(get_review_service)],
+) -> DocumentOut:
+    try:
+        return DocumentOut.from_document(
+            service.approve(document_id, reviewer=DEMO_USER)
+        )
+    except DocumentNotFoundError:
+        raise HTTPException(status_code=404, detail="Document not found") from None
+    except InvalidTransitionError as error:
+        raise HTTPException(status_code=409, detail=str(error)) from None
+
+
+@router.post(
+    "/{document_id}/reject",
+    responses={
+        404: {"description": "Document not found"},
+        409: {"description": "Not in review"},
+    },
+)
+def reject_document(
+    document_id: UUID,
+    body: RejectIn,
+    service: Annotated[ReviewService, Depends(get_review_service)],
+) -> DocumentOut:
+    try:
+        rejected = service.reject(document_id, reviewer=DEMO_USER, reason=body.reason)
+        return DocumentOut.from_document(rejected)
+    except DocumentNotFoundError:
+        raise HTTPException(status_code=404, detail="Document not found") from None
+    except InvalidTransitionError as error:
+        raise HTTPException(status_code=409, detail=str(error)) from None
+    except InvalidReviewError as error:
+        raise HTTPException(status_code=400, detail=str(error)) from None

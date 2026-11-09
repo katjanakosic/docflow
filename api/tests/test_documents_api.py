@@ -1,5 +1,5 @@
 from pathlib import Path
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 import pytest
 from fastapi.testclient import TestClient
@@ -8,6 +8,7 @@ from app.adapters.memory_documents import InMemoryDocumentRepository
 from app.adapters.memory_queue import InMemoryQueue
 from app.adapters.memory_storage import InMemoryStorage
 from app.api.deps import get_documents, get_queue, get_storage
+from app.domain.state_machine import Action
 from app.main import app
 
 EVALS_DIR = Path(__file__).parents[2] / "evals"
@@ -20,9 +21,13 @@ def queue():
 
 
 @pytest.fixture
-def client(queue):
+def documents():
+    return InMemoryDocumentRepository()
+
+
+@pytest.fixture
+def client(queue, documents):
     storage = InMemoryStorage()
-    documents = InMemoryDocumentRepository()
     app.dependency_overrides[get_storage] = lambda: storage
     app.dependency_overrides[get_documents] = lambda: documents
     app.dependency_overrides[get_queue] = lambda: queue
@@ -99,3 +104,52 @@ def test_listing_respects_the_limit_and_rejects_invalid_values(client):
 
     assert len(client.get("/api/v1/documents?limit=1").json()) == 1
     assert client.get("/api/v1/documents?limit=0").status_code == 422
+
+
+def ready_for_review(client, documents) -> str:
+    """Uploads the sample and moves it to needs_review, as the worker would."""
+    document_id = upload(client).json()["document"]["id"]
+    document = documents.get(UUID(document_id))
+    document.apply(Action.START_EXTRACTION)
+    document.apply(Action.EXTRACTION_SUCCEEDED)
+    documents.update(document)
+    return document_id
+
+
+def test_approving_a_document(client, documents):
+    document_id = ready_for_review(client, documents)
+    response = client.post(f"/api/v1/documents/{document_id}/approve")
+
+    assert response.status_code == 200
+    assert response.json()["status"] == "approved"
+    assert response.json()["reviewed_by"] == "demo-user"
+
+
+def test_approving_twice_returns_409(client, documents):
+    document_id = ready_for_review(client, documents)
+    client.post(f"/api/v1/documents/{document_id}/approve")
+    assert client.post(f"/api/v1/documents/{document_id}/approve").status_code == 409
+
+
+def test_rejecting_with_a_reason(client, documents):
+    document_id = ready_for_review(client, documents)
+    response = client.post(
+        f"/api/v1/documents/{document_id}/reject",
+        json={"reason": "Unreadable or incomplete"},
+    )
+
+    assert response.status_code == 200
+    assert response.json()["status"] == "rejected"
+    assert response.json()["rejection_reason"] == "Unreadable or incomplete"
+
+
+def test_rejecting_without_a_reason_returns_422(client, documents):
+    document_id = ready_for_review(client, documents)
+    response = client.post(
+        f"/api/v1/documents/{document_id}/reject", json={"reason": ""}
+    )
+    assert response.status_code == 422
+
+
+def test_approving_an_unknown_document_returns_404(client):
+    assert client.post(f"/api/v1/documents/{uuid4()}/approve").status_code == 404

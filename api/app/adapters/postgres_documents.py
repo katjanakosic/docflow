@@ -38,6 +38,9 @@ documents_table = Table(
     Column("created_at", DateTime(timezone=True), nullable=False),
     Column("extracted_data", JSONB, nullable=True),
     Column("last_error", Text, nullable=True),
+    Column("reviewed_by", Text, nullable=True),
+    Column("reviewed_at", DateTime(timezone=True), nullable=True),
+    Column("rejection_reason", Text, nullable=True),
 )
 
 
@@ -58,6 +61,9 @@ def _to_row(document: Document) -> dict:
             else None
         ),
         "last_error": document.last_error,
+        "reviewed_by": document.reviewed_by,
+        "reviewed_at": document.reviewed_at,
+        "rejection_reason": document.rejection_reason,
     }
 
 
@@ -75,6 +81,9 @@ def _to_document(row) -> Document:
         created_at=row["created_at"],
         extracted_data=ExtractedData.model_validate(data) if data is not None else None,
         last_error=row["last_error"],
+        reviewed_by=row["reviewed_by"],
+        reviewed_at=row["reviewed_at"],
+        rejection_reason=row["rejection_reason"],
     )
 
 
