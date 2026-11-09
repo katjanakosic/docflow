@@ -5,6 +5,7 @@ import Link from "next/link";
 
 import { StatusBadge } from "@/components/status-badge";
 import type { components } from "@/lib/api-types";
+import { formatDateTime, formatMoney } from "@/lib/format";
 
 type DocumentOut = components["schemas"]["DocumentOut"];
 
@@ -16,14 +17,6 @@ async function fetchDocuments(): Promise<DocumentOut[]> {
     throw new Error(`The API answered with status ${response.status}`);
   }
   return response.json();
-}
-
-function formatDate(value: string): string {
-  return new Date(value).toLocaleString("de-CH", {
-    timeZone: "Europe/Zurich",
-    dateStyle: "medium",
-    timeStyle: "short",
-  });
 }
 
 export function DocumentList({ initialDocuments }: { initialDocuments: DocumentOut[] }) {
@@ -79,11 +72,11 @@ export function DocumentList({ initialDocuments }: { initialDocuments: DocumentO
                 <td className="px-4 py-3">{document.extracted_data?.supplier_name ?? "–"}</td>
                 <td className="px-4 py-3 text-right tabular-nums">
                   {document.extracted_data
-                    ? `${document.extracted_data.currency} ${document.extracted_data.total}`
+                    ? `${document.extracted_data.currency} ${formatMoney(document.extracted_data.total)}`
                     : "–"}
                 </td>
                 <td className="px-4 py-3 whitespace-nowrap text-muted">
-                  {formatDate(document.created_at)}
+                  {formatDateTime(document.created_at)} 
                 </td>
               </tr>
             ))}
