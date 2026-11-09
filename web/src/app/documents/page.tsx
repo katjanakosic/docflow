@@ -17,16 +17,16 @@ async function getDocuments(): Promise<DocumentOut[]> {
 }
 
 export default function DocumentsPage() {
-  return (
-    <main className="mx-auto max-w-5xl p-8">
-      <h1 className="mb-6 text-2xl font-semibold">Documents</h1>
-      <UploadForm />
-      <Suspense fallback={<p className="text-gray-500">Loading documents…</p>}>
-        <InitialDocuments />
-      </Suspense>
-    </main>
-  );
-}
+    return (
+      <main className="mx-auto max-w-6xl px-8 py-10">
+        <h1 className="mb-6 text-3xl font-bold tracking-tight">Documents</h1>
+        <UploadForm />
+        <Suspense fallback={<p className="text-muted">Loading documents…</p>}>
+          <InitialDocuments />
+        </Suspense>
+      </main>
+    );
+  }
 
 async function InitialDocuments() {
   const documents = await getDocuments();

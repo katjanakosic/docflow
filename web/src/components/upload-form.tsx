@@ -34,19 +34,33 @@ export function UploadForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mb-8 flex items-center gap-3">
-      <input type="file" name="file" accept="application/pdf" required className="text-sm" />
-      <button
-        type="submit"
-        disabled={upload.isPending}
-        className="rounded bg-blue-600 px-4 py-1.5 text-sm font-medium text-white disabled:opacity-50"
-      >
-        {upload.isPending ? "Uploading…" : "Upload"}
-      </button>
-      {upload.isError && <p className="text-sm text-red-500">{upload.error.message}</p>}
-      {upload.isSuccess && upload.data.duplicate && (
-        <p className="text-sm text-gray-500">Already uploaded: showing the existing document.</p>
-      )}
+    <form
+      onSubmit={handleSubmit}
+      className="mb-8 rounded-md border border-rule bg-sheet px-5 py-4"
+    >
+      <p className="mb-3 text-sm text-muted">
+        Add a supplier invoice or purchase order as a PDF, up to 20 MB.
+      </p>
+      <div className="flex flex-wrap items-center gap-3">
+        <input
+          type="file"
+          name="file"
+          accept="application/pdf"
+          required
+          className="text-sm text-muted file:mr-3 file:rounded file:border file:border-rule file:bg-paper file:px-3 file:py-1.5 file:text-sm file:text-ink hover:file:bg-white"
+        />
+        <button
+          type="submit"
+          disabled={upload.isPending}
+          className="rounded bg-stamp px-4 py-1.5 text-sm font-medium text-white hover:bg-stamp/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-stamp disabled:opacity-50"
+        >
+          {upload.isPending ? "Uploading…" : "Upload PDF"}
+        </button>
+        {upload.isError && <p className="text-sm text-red-700">{upload.error.message}</p>}
+        {upload.isSuccess && upload.data.duplicate && (
+          <p className="text-sm text-muted">This file is already in DocFlow.</p>
+        )}
+      </div>
     </form>
   );
 }
