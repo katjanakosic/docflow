@@ -178,3 +178,18 @@ def test_retrying_a_failed_extraction_queues_it_again(client, documents, queue):
 def test_retrying_a_document_that_did_not_fail_returns_409(client, documents):
     document_id = ready_for_review(client, documents)
     assert client.post(f"/api/v1/documents/{document_id}/retry").status_code == 409
+
+
+def test_the_file_endpoint_redirects_to_a_storage_link(client):
+    document_id = upload(client).json()["document"]["id"]
+    response = client.get(
+        f"/api/v1/documents/{document_id}/file", follow_redirects=False
+    )
+
+    assert response.status_code == 307
+    assert response.headers["location"].startswith("memory://documents/")
+
+
+def test_the_file_of_an_unknown_document_returns_404(client):
+    response = client.get(f"/api/v1/documents/{uuid4()}/file", follow_redirects=False)
+    assert response.status_code == 404

@@ -21,6 +21,8 @@ class Storage(Protocol):
 
     def exists(self, key: str) -> bool: ...
 
+    def presigned_url(self, key: str, expires_in_seconds: int) -> str: ...
+
 
 class ExtractionError(Exception):
     """Raised when a document cannot be turned into ExtractedData."""

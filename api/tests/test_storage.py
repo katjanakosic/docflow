@@ -2,6 +2,7 @@ import os
 from uuid import uuid4
 
 import boto3
+import httpx
 import pytest
 from botocore.config import Config
 from botocore.exceptions import BotoCoreError, ClientError
@@ -62,3 +63,14 @@ def test_storing_again_replaces_the_file(storage, key):
     storage.put(key, b"old", "application/pdf")
     storage.put(key, b"new", "application/pdf")
     assert storage.get(key) == b"new"
+
+
+def test_a_presigned_url_gives_access_to_the_file(storage, key):
+    storage.put(key, b"%PDF-1.4 hello", "application/pdf")
+    url = storage.presigned_url(key, expires_in_seconds=60)
+
+    assert key in url
+    if url.startswith("http"):  # a real storage behind it: download through the link
+        response = httpx.get(url)
+        assert response.status_code == 200
+        assert response.content == b"%PDF-1.4 hello"

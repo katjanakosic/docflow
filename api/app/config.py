@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file="../.env", extra="ignore")
 
     s3_endpoint_url: str | None = None  # None means Amazon S3
+    s3_public_endpoint_url: str | None = None  # the address browsers use, if different
     s3_access_key: str
     s3_secret_key: str
     s3_bucket: str

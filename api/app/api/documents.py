@@ -13,16 +13,18 @@ from fastapi import (
     UploadFile,
     status,
 )
+from fastapi.responses import RedirectResponse
 from pydantic import BaseModel, Field
 
 from app.api.deps import (
     get_documents,
     get_retry_service,
     get_review_service,
+    get_storage,
     get_upload_service,
 )
 from app.domain.models import Document, ExtractedData
-from app.domain.ports import DocumentNotFoundError, DocumentRepository
+from app.domain.ports import DocumentNotFoundError, DocumentRepository, Storage
 from app.domain.state_machine import InvalidTransitionError, Status
 from app.services.retry import RetryService
 from app.services.review import InvalidReviewError, ReviewService
@@ -186,3 +188,24 @@ def retry_extraction(
         raise HTTPException(status_code=404, detail="Document not found") from None
     except InvalidTransitionError as error:
         raise HTTPException(status_code=409, detail=str(error)) from None
+
+
+FILE_LINK_SECONDS = 300
+
+
+@router.get(
+    "/{document_id}/file",
+    status_code=status.HTTP_307_TEMPORARY_REDIRECT,
+    responses={404: {"description": "Document not found"}},
+)
+def get_document_file(
+    document_id: UUID,
+    documents: Annotated[DocumentRepository, Depends(get_documents)],
+    storage: Annotated[Storage, Depends(get_storage)],
+) -> RedirectResponse:
+    try:
+        document = documents.get(document_id)
+    except DocumentNotFoundError:
+        raise HTTPException(status_code=404, detail="Document not found") from None
+    url = storage.presigned_url(document.storage_key, FILE_LINK_SECONDS)
+    return RedirectResponse(url, status_code=status.HTTP_307_TEMPORARY_REDIRECT)

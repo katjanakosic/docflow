@@ -43,38 +43,48 @@ export function DocumentView({ initialDocument }: { initialDocument: DocumentOut
         <p className="mt-1 text-sm text-muted">Uploaded {formatDateTime(document.created_at)}</p>
       </header>
 
-      {isInProgress(document) && (
-        <p className="rounded-md border border-rule bg-sheet px-5 py-4 text-sm text-muted">
-          Reading the document. This page updates by itself when the data is ready.
-        </p>
-      )}
+      <div className="grid items-start gap-6 lg:grid-cols-2">
+        <iframe
+          src={`/api/v1/documents/${document.id}/file`}
+          title={`Original PDF: ${document.file_name}`}
+          className="h-[80vh] w-full rounded-md border border-rule bg-white lg:sticky lg:top-6"
+        />
 
-      {document.status === "extraction_failed" && (
-        <div className="rounded-md border border-red-700/30 bg-red-50 px-5 py-4 text-sm text-red-800">
-          <p className="font-medium">The data couldn’t be read from this PDF.</p>
-          <p className="mt-1">{document.last_error}</p>
-          <RetryButton documentId={document.id} />
+        <div>
+          {isInProgress(document) && (
+            <p className="rounded-md border border-rule bg-sheet px-5 py-4 text-sm text-muted">
+              Reading the document. This page updates by itself when the data is ready.
+            </p>
+          )}
+
+          {document.status === "extraction_failed" && (
+            <div className="rounded-md border border-red-700/30 bg-red-50 px-5 py-4 text-sm text-red-800">
+              <p className="font-medium">The data couldn’t be read from this PDF.</p>
+              <p className="mt-1">{document.last_error}</p>
+              <RetryButton documentId={document.id} />
+            </div>
+          )}
+
+          {document.status === "needs_review" && <ReviewActions documentId={document.id} />}
+
+          {document.status === "approved" && document.reviewed_at && (
+            <p className="mb-6 rounded-md border border-green-700/30 bg-green-50 px-5 py-4 text-sm text-green-900">
+              Approved by {document.reviewed_by} on {formatDateTime(document.reviewed_at)}.
+            </p>
+          )}
+
+          {document.status === "rejected" && document.reviewed_at && (
+            <div className="mb-6 rounded-md border border-red-700/30 bg-red-50 px-5 py-4 text-sm text-red-800">
+              <p className="font-medium">
+                Rejected by {document.reviewed_by} on {formatDateTime(document.reviewed_at)}.
+              </p>
+              <p className="mt-1">{document.rejection_reason}</p>
+            </div>
+          )}
+
+          {document.extracted_data && <ExtractedView data={document.extracted_data} />}
         </div>
-      )}
-
-      {document.status === "needs_review" && <ReviewActions documentId={document.id} />}
-
-      {document.status === "approved" && document.reviewed_at && (
-        <p className="mb-6 rounded-md border border-green-700/30 bg-green-50 px-5 py-4 text-sm text-green-900">
-          Approved by {document.reviewed_by} on {formatDateTime(document.reviewed_at)}.
-        </p>
-      )}
-
-      {document.status === "rejected" && document.reviewed_at && (
-        <div className="mb-6 rounded-md border border-red-700/30 bg-red-50 px-5 py-4 text-sm text-red-800">
-          <p className="font-medium">
-            Rejected by {document.reviewed_by} on {formatDateTime(document.reviewed_at)}.
-          </p>
-          <p className="mt-1">{document.rejection_reason}</p>
-        </div>
-      )}
-
-      {document.extracted_data && <ExtractedView data={document.extracted_data} />}
+      </div>
     </article>
   );
 }
@@ -102,7 +112,7 @@ function ExtractedView({ data }: { data: ExtractedData }) {
           are ones the AI was less sure about. Check them against the PDF.
         </p>
       )}
-      <div className="grid gap-6 lg:grid-cols-[1fr_2fr]">
+      <div className="grid gap-6">
         <section className="rounded-md border border-rule bg-sheet p-5">
           <h2 className="mb-4 font-semibold">Document</h2>
           <dl className="space-y-3 text-sm">

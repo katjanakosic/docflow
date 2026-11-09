@@ -48,6 +48,7 @@ services:
       DATABASE_URL: postgresql+psycopg://docflow:docflow@postgres:5432/docflow
       REDIS_URL: redis://redis:6379/0
       S3_ENDPOINT_URL: http://minio:9000
+      S3_PUBLIC_ENDPOINT_URL: http://localhost:9000
     depends_on:
       postgres:
         condition: service_healthy

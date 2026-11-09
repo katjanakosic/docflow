@@ -16,3 +16,6 @@ class InMemoryStorage:
 
     def exists(self, key: str) -> bool:
         return key in self._objects
+
+    def presigned_url(self, key: str, expires_in_seconds: int) -> str:
+        return f"memory://{key}?expires_in={expires_in_seconds}"

@@ -27,6 +27,7 @@ def get_storage() -> Storage:
         settings.s3_access_key,
         settings.s3_secret_key,
         settings.s3_bucket,
+        public_endpoint_url=settings.s3_public_endpoint_url,
     )
 
 
